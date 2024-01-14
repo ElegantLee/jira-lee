@@ -1,0 +1,4 @@
+/node_modules
+/__json_server_mock__
+.prettierrc
+.prettierignore
