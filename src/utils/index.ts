@@ -28,7 +28,7 @@ export const useDebounce = <V>(value: V, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     const timeout = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timeout);
+    return () => clearTimeout(timeout); // 每次在上一个 useEffect 处理完再执行
   }, [value, delay]);
 
   return debouncedValue;

@@ -1,6 +1,6 @@
-import qs from "qs";
-import * as auth from "auth-provider";
-import { useAuth } from "../screens/context/auth-context";
+import qs from 'qs';
+import * as auth from 'auth-provider';
+import { useAuth } from '../screens/context/auth-context';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 interface Config extends RequestInit {
@@ -12,15 +12,15 @@ export const http = async (
   { data, token, headers, ...customConfig }: Config = {}
 ) => {
   const config = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Authorization: token ? `Bearer ${token}` : "",
-      "Content-Type": data ? "application/json" : "",
+      Authorization: token ? `Bearer ${token}` : '',
+      'Content-Type': data ? 'application/json' : '',
     },
     ...customConfig,
   };
 
-  if (config.method.toUpperCase() === "GET") {
+  if (config.method.toUpperCase() === 'GET') {
     endpoint += `?${qs.stringify(data)}`;
   } else {
     config.body = JSON.stringify(data || {});
@@ -33,13 +33,13 @@ export const http = async (
       if (response.status === 401) {
         await auth.logout();
         window.location.reload();
-        return Promise.reject({ message: "请重新登录" });
+        return Promise.reject({ message: '请重新登录' });
       }
       const data = await response.json();
       if (response.ok) {
         return data;
       } else {
-        return Promise.reject(data); // 主动抛出异常，fetch不会根据返回的状态码自动抛出异常，除非网络连接中断或连接失败
+        return Promise.reject(data); // 主动抛出异常，fetch 不会根据返回的状态码自动抛出异常，除非网络连接中断或连接失败
       }
     });
 };
@@ -51,14 +51,3 @@ export const useHttp = () => {
   return (...[endpoint, config]: Parameters<typeof http>) =>
     http(endpoint, { ...config, token: user?.token });
 };
-
-type Person = {
-  name: string;
-  age: number;
-};
-
-const zhangsan: Partial<Person> = {};
-
-const shengmiren: Omit<Person, "name"> = { age: 8 };
-
-const personOnlyName: Pick<Person, "name"> = { name: "jack" };

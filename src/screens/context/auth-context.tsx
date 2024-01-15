@@ -1,8 +1,8 @@
-import React, { ReactNode, useState } from "react";
-import * as auth from "auth-provider";
-import { User } from "../project-list/search-panel";
-import { http } from "../../utils/http";
-import { useMount } from "../../utils";
+import React, { ReactNode, useState } from 'react';
+import * as auth from 'auth-provider';
+import { User } from '../project-list/search-panel';
+import { http } from '../../utils/http';
+import { useMount } from '../../utils';
 
 interface AuthForm {
   username: string;
@@ -14,7 +14,7 @@ const bootstrapUser = async () => {
   let user = null;
   const token = auth.getToken();
   if (token) {
-    const data = await http("me", { token });
+    const data = await http('me', { token });
     user = data.user;
   }
   return user;
@@ -29,7 +29,7 @@ const AuthContext = React.createContext<
     }
   | undefined
 >(undefined);
-AuthContext.displayName = "AuthContext";
+AuthContext.displayName = 'AuthContext';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth必须在AuthProvider中使用");
+    throw new Error('useAuth 必须在 AuthProvider 中使用');
   }
   return context;
 };
