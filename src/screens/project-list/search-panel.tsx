@@ -1,5 +1,7 @@
-import { Input, Select } from 'antd';
+// import { useEmotionCss } from '@ant-design/use-emotion-css';
+import { css } from '@emotion/css';
 import React from 'react';
+import { Form, Input, Select } from 'antd';
 // import {useState} from "react";
 
 export interface User {
@@ -18,11 +20,23 @@ interface SearchPanelProps {
   };
   setParam: (param: SearchPanelProps['param']) => void;
 }
+
 export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
+  // const formStyle = useEmotionCss((token: ) => {
+  //   return {
+  //     marginBottom: '2rem',
+  //   };
+  // });
   return (
-    <form>
-      <div>
+    <Form
+      className={css({
+        marginBottom: '2rem',
+      })}
+      layout={'inline'}
+    >
+      <Form.Item>
         <Input
+          placeholder={'用户名'}
           type="text"
           value={param.name}
           onChange={(evt) =>
@@ -32,6 +46,8 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
             })
           }
         />
+      </Form.Item>
+      <Form.Item>
         <Select
           value={param.personId}
           onChange={(value) =>
@@ -48,7 +64,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
             </Select.Option>
           ))}
         </Select>
-      </div>
-    </form>
+      </Form.Item>
+    </Form>
   );
 };
