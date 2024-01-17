@@ -2,13 +2,14 @@ import React from 'react';
 import { SearchPanel } from './search-panel';
 import { List, Project } from './list';
 import { useEffect, useState } from 'react';
-import { cleanObject, useDebounce, useMount } from 'utils';
+import { cleanObject, useDebounce, useDocumentTitle, useMount } from 'utils';
 import { useHttp } from '../../utils/http';
 import styled from '@emotion/styled';
 import { useAsync } from 'utils/use-async';
 import { Typography } from 'antd';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
+import { Helmet } from 'react-helmet';
 
 const { Text } = Typography;
 
@@ -21,6 +22,8 @@ export const ProjectListScreen = () => {
   const debouncedParam = useDebounce(param, 200);
   const { isLoading, error, data: list } = useProjects(debouncedParam);
   const { data: users } = useUsers();
+
+  useDocumentTitle('项目列表', false);
 
   return (
     <Contariner>
