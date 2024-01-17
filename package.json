@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/use-emotion-css": "^1.0.4",
     "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
@@ -15,10 +16,12 @@
     "@types/react-dom": "^18.0.0",
     "antd": "^4.9.1",
     "craco-less": "^3.0.1",
-    "jira-dev-tool": "^1.7.61",
+    "dayjs": "^1.11.10",
+    "jira-dev-tool": "^1.6.59",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
@@ -54,6 +57,7 @@
     "@commitlint/config-conventional": "^17.6.5",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^8.0.3",
+    "less": "^4.2.0",
     "lint-staged": "^13.2.2",
     "prettier": "2.8.8"
   },
