@@ -2,3 +2,4 @@
 /__json_server_mock__
 .prettierrc
 .prettierignore
+.DS_Store
