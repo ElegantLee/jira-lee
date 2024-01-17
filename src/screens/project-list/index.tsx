@@ -1,40 +1,41 @@
 import React from 'react';
 import { SearchPanel } from './search-panel';
-import { List } from './list';
+import { List, Project } from './list';
 import { useEffect, useState } from 'react';
 import { cleanObject, useDebounce, useMount } from 'utils';
 import { useHttp } from '../../utils/http';
 import styled from '@emotion/styled';
+import { useAsync } from 'utils/use-async';
+import { Typography } from 'antd';
+import { useProjects } from 'utils/project';
+import { useUsers } from 'utils/user';
+
+const { Text } = Typography;
 
 export const ProjectListScreen = () => {
   const [param, setParam] = useState({
     name: '',
     personId: '',
   });
-  const [users, setUsers] = useState([]);
-  const [list, setList] = useState([]);
+
   const debouncedParam = useDebounce(param, 200);
-  const client = useHttp();
-
-  useEffect(() => {
-    client('projects', { data: cleanObject(debouncedParam) }).then(setList);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedParam]);
-
-  useMount(() => {
-    client('users').then(setUsers);
-    // fetch(`${apiUrl}/users`).then(async (response) => {
-    //   if (response.ok) {
-    //     setUsers(await response.json());
-    //   }
-    // });
-  });
+  const { isLoading, error, data: list } = useProjects(debouncedParam);
+  const { data: users } = useUsers();
 
   return (
     <Contariner>
       <h1>项目列表</h1>
-      <SearchPanel users={users} param={param} setParam={setParam} />
-      <List list={list} users={users} />
+      <SearchPanel users={users || []} param={param} setParam={setParam} />
+      {error ? (
+        <Typography>
+          <Text type="danger">{error.message}</Text>
+        </Typography>
+      ) : null}
+      <List
+        loading={isLoading}
+        dataSource={list || undefined}
+        users={users || []}
+      />
     </Contariner>
   );
 };
