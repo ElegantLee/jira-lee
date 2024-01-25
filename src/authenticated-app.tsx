@@ -5,8 +5,32 @@ import styled from '@emotion/styled';
 import { Row } from 'components/lib';
 import { ReactComponent as SoftwareLogo } from 'assets/software-logo.svg';
 import { Button, Dropdown, MenuProps } from 'antd';
+import { Navigate, Route, Routes } from 'react-router';
+import { ProjectScreen } from 'screens/project';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { resetRoute } from 'utils';
 
 export const AuthenticatedApp = () => {
+  return (
+    <Container>
+      <PageHeader />
+      <Main>
+        <Router>
+          <Routes>
+            <Route path={'/'} element={<Navigate to={'/projects'} />} />
+            <Route path={'/projects'} element={<ProjectListScreen />} />
+            <Route
+              path={'/projects/:projectId/*'}
+              element={<ProjectScreen />}
+            />
+          </Routes>
+        </Router>
+      </Main>
+    </Container>
+  );
+};
+
+const PageHeader = () => {
   const { logout, user } = useAuth();
   const items: MenuProps['items'] = [
     {
@@ -18,27 +42,23 @@ export const AuthenticatedApp = () => {
       ),
     },
   ];
-
   return (
-    <Container>
-      <Header between>
-        <HeaderLeft gap>
+    <Header between>
+      <HeaderLeft gap>
+        <Button type={'link'} onClick={resetRoute}>
           <SoftwareLogo width={'18rem'} color={'rgb(38, 132, 255)'} />
-          <h2>项目</h2>
-          <h2>用户</h2>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown menu={{ items }}>
-            <Button type="link" onClick={(e) => e.preventDefault()}>
-              Hi, {user?.name}
-            </Button>
-          </Dropdown>
-        </HeaderRight>
-      </Header>
-      <Main>
-        <ProjectListScreen />
-      </Main>
-    </Container>
+        </Button>
+        <h2>项目</h2>
+        <h2>用户</h2>
+      </HeaderLeft>
+      <HeaderRight>
+        <Dropdown menu={{ items }}>
+          <Button type="link" onClick={(e) => e.preventDefault()}>
+            Hi, {user?.name}
+          </Button>
+        </Dropdown>
+      </HeaderRight>
+    </Header>
   );
 };
 
