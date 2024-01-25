@@ -10,18 +10,19 @@ import { Typography } from 'antd';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 import { Helmet } from 'react-helmet';
+import { Test } from '../../components/test-closure';
+import { useUrlQueryParam } from 'utils/url';
 
 const { Text } = Typography;
 
 export const ProjectListScreen = () => {
-  const [param, setParam] = useState({
-    name: '',
-    personId: '',
-  });
-
+  const [param, setParam] = useUrlQueryParam(['name', 'personId']);
+  console.log(param);
   const debouncedParam = useDebounce(param, 200);
   const { isLoading, error, data: list } = useProjects(debouncedParam);
   const { data: users } = useUsers();
+
+  // console.log(useUrlQueryParam(['name']));
 
   useDocumentTitle('项目列表', false);
 
