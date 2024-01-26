@@ -1,5 +1,5 @@
-import { error } from 'console';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useMountedRef } from 'utils';
 
 interface State<D> {
   error: Error | null;
@@ -26,38 +26,59 @@ export const useAsync = <D>(
     ...defaultInitialState,
   });
   const config = { ...initialConfig, defaultConfig };
-  const setData = (data: D) =>
-    setState({
-      data,
-      stat: 'success',
-      error: null,
-    });
+  const [retry, setRetry] = useState(() => () => {});
+  const mountedRef = useMountedRef();
 
-  const setError = (error: Error) =>
-    setState({
-      error,
-      stat: 'error',
-      data: null,
-    });
+  const setData = useCallback(
+    (data: D) =>
+      setState({
+        data,
+        stat: 'success',
+        error: null,
+      }),
+    []
+  );
 
-  const run = (promise: Promise<D>) => {
-    if (!promise || !promise.then) {
-      throw new Error('请传入 Promise 类型参数');
-    }
-    setState({ ...state, stat: 'loading' });
-    return promise
-      .then((data) => {
-        setData(data);
-        return data;
-      })
-      .catch((error) => {
-        setError(error);
-        // 如果传入的 promise 出错，这里的 catch 就将 error 捕获掉了，外部捕获不到 error。
-        // 所以这里添加一个配置项以根据传入的参数判断是否主动抛出异常
-        if (config.throwOnError) return Promise.reject(error);
-        return error;
+  const setError = useCallback(
+    (error: Error) =>
+      setState({
+        error,
+        stat: 'error',
+        data: null,
+      }),
+    []
+  );
+
+  // 用于触发异步请求
+  const run = useCallback(
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      if (!promise || !promise.then) {
+        throw new Error('请传入 Promise 类型参数');
+      }
+      setRetry(() => () => {
+        if (runConfig?.retry) {
+          run(runConfig.retry(), runConfig);
+        }
       });
-  };
+      // 传入更新函数以解决重渲染问题
+      setState((preState) => ({ ...preState, stat: 'loading' }));
+      return promise
+        .then((data) => {
+          if (mountedRef.current) {
+            setData(data);
+          }
+          return data;
+        })
+        .catch((error) => {
+          setError(error);
+          // 如果传入的 promise 出错，这里的 catch 就将 error 捕获掉了，外部捕获不到 error。
+          // 所以这里添加一个配置项以根据传入的参数判断是否主动抛出异常
+          if (config.throwOnError) return Promise.reject(error);
+          return error;
+        });
+    },
+    [config.throwOnError, mountedRef, setData, setError]
+  );
 
   return {
     isIdle: state.stat === 'idle',
@@ -67,6 +88,7 @@ export const useAsync = <D>(
     run,
     setData,
     setError,
+    retry,
     ...state,
   };
 };

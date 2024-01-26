@@ -1,6 +1,7 @@
 import qs from 'qs';
 import * as auth from 'auth-provider';
 import { useAuth } from '../screens/context/auth-context';
+import { useCallback } from 'react';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 interface Config extends RequestInit {
@@ -48,6 +49,9 @@ export const useHttp = () => {
   const { user } = useAuth();
   // utility type: 使用泛型传入一个其他类型，然后utility type对这个类型进行某种操作
   // 这里的 typeof 是 TS 静态环境下运行的
-  return (...[endpoint, config]: Parameters<typeof http>) =>
-    http(endpoint, { ...config, token: user?.token });
+  return useCallback(
+    (...[endpoint, config]: Parameters<typeof http>) =>
+      http(endpoint, { ...config, token: user?.token }),
+    [user?.token]
+  );
 };
