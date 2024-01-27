@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useReducer, useState } from 'react';
 import { useMountedRef } from 'utils';
 
 interface State<D> {
@@ -17,36 +17,47 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef]
+  );
+};
+
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig
 ) => {
-  const [state, setState] = useState<State<D>>({
-    ...initialState,
-    ...defaultInitialState,
-  });
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...initialState,
+      ...defaultInitialState,
+    }
+  );
   const config = { ...initialConfig, defaultConfig };
   const [retry, setRetry] = useState(() => () => {});
-  const mountedRef = useMountedRef();
+  const safeDispatch = useSafeDispatch(dispatch);
 
   const setData = useCallback(
     (data: D) =>
-      setState({
+      safeDispatch({
         data,
         stat: 'success',
         error: null,
       }),
-    []
+    [safeDispatch]
   );
 
   const setError = useCallback(
     (error: Error) =>
-      setState({
+      safeDispatch({
         error,
         stat: 'error',
         data: null,
       }),
-    []
+    [safeDispatch]
   );
 
   // 用于触发异步请求
@@ -61,12 +72,9 @@ export const useAsync = <D>(
         }
       });
       // 传入更新函数以解决重渲染问题
-      setState((preState) => ({ ...preState, stat: 'loading' }));
+      safeDispatch({ stat: 'loading' });
       return promise
         .then((data) => {
-          if (mountedRef.current) {
-            setData(data);
-          }
           return data;
         })
         .catch((error) => {
@@ -77,7 +85,7 @@ export const useAsync = <D>(
           return error;
         });
     },
-    [config.throwOnError, mountedRef, setData, setError]
+    [config.throwOnError, safeDispatch, setError]
   );
 
   return {
