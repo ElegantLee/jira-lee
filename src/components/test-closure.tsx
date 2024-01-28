@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useMount } from 'utils';
 
 const test = () => {
   let num = 0;

@@ -1,14 +1,17 @@
 import React from 'react';
 import { User } from './search-panel';
-import { Table, TableProps } from 'antd';
+import { Dropdown, Table, TableProps } from 'antd';
+import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
+import { Pin } from 'components/pin';
+import { useEditProject } from 'utils/project';
+import { ButtonNoPadding } from 'components/lib';
 
-// TODO: 把所有 id 换成 number 类型
 export interface Project {
-  id: string;
+  id: number;
   name: string;
-  personId: string;
+  personId: number;
   pin: boolean;
   organization: string;
   created: number;
@@ -16,14 +19,31 @@ export interface Project {
 
 interface ListProps extends TableProps<any> {
   users: User[];
+  refresh?: () => void;
+  setProjectModalOpen: (isOpen: boolean) => void;
 }
 export const List = ({ users, ...props }: ListProps) => {
+  const { mutate } = useEditProject();
   return (
     <Table
       loading={props.loading}
       pagination={false}
       rowKey={'id'}
       columns={[
+        {
+          title: <Pin checked={true} disabled={true} />,
+          key: 'pin',
+          render(value, project) {
+            return (
+              <Pin
+                checked={project.pin}
+                onCheckedChange={(pin) => {
+                  mutate({ id: project.id, pin }).then(props.refresh);
+                }}
+              />
+            );
+          },
+        },
         {
           title: '名称',
           key: 'name',
@@ -61,6 +81,28 @@ export const List = ({ users, ...props }: ListProps) => {
                   ? dayjs(project.created).format('YYYY-MM-DD')
                   : '无'}
               </span>
+            );
+          },
+        },
+        {
+          render(value, project) {
+            const items: MenuProps['items'] = [
+              {
+                key: 'edit',
+                label: (
+                  <ButtonNoPadding
+                    type={'link'}
+                    onClick={() => props.setProjectModalOpen(true)}
+                  >
+                    编辑
+                  </ButtonNoPadding>
+                ),
+              },
+            ];
+            return (
+              <Dropdown menu={{ items }}>
+                <ButtonNoPadding type={'link'}>...</ButtonNoPadding>
+              </Dropdown>
             );
           },
         },
