@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import { Pin } from 'components/pin';
 import { useEditProject } from 'utils/project';
 import { ButtonNoPadding } from 'components/lib';
+import { projectListActions } from './project-list.slice';
+import { useAppDispatch } from 'store/hooks';
 
 export interface Project {
   id: number;
@@ -20,10 +22,10 @@ export interface Project {
 interface ListProps extends TableProps<any> {
   users: User[];
   refresh?: () => void;
-  setProjectModalOpen: (isOpen: boolean) => void;
 }
 export const List = ({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject();
+  const dispatch = useAppDispatch();
   return (
     <Table
       loading={props.loading}
@@ -92,7 +94,9 @@ export const List = ({ users, ...props }: ListProps) => {
                 label: (
                   <ButtonNoPadding
                     type={'link'}
-                    onClick={() => props.setProjectModalOpen(true)}
+                    onClick={() =>
+                      dispatch(projectListActions.openProjectModal())
+                    }
                   >
                     编辑
                   </ButtonNoPadding>

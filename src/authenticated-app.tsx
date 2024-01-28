@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ProjectListScreen } from './screens/project-list';
 import { useAuth } from './screens/context/auth-context';
 import styled from '@emotion/styled';
@@ -11,22 +11,23 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { resetRoute } from 'utils';
 import { ProjectModal } from 'screens/project-list/project-modal';
 import { ProjectPopover } from 'components/project-popover';
+import { projectListActions } from 'screens/project-list/project-list.slice';
+import { useAppDispatch } from 'store/hooks';
 
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const dispatch = useAppDispatch();
   return (
     <Container>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
+      <PageHeader
+        setProjectModalOpen={() =>
+          dispatch(projectListActions.openProjectModal())
+        }
+      />
       <Main>
         <Router>
           <Routes>
             <Route path={'/'} element={<Navigate to={'/projects'} />} />
-            <Route
-              path={'/projects'}
-              element={
-                <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
-              }
-            />
+            <Route path={'/projects'} element={<ProjectListScreen />} />
             <Route
               path={'/projects/:projectId/*'}
               element={<ProjectScreen />}
@@ -34,10 +35,7 @@ export const AuthenticatedApp = () => {
           </Routes>
         </Router>
       </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+      <ProjectModal />
     </Container>
   );
 };
@@ -51,7 +49,7 @@ const PageHeader = (props: {
         <ButtonNoPadding type={'link'} onClick={resetRoute}>
           <SoftwareLogo width={'18rem'} color={'rgb(38, 132, 255)'} />
         </ButtonNoPadding>
-        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} />
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

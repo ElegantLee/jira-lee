@@ -1,18 +1,24 @@
-import { Button, Drawer } from 'antd';
 import React from 'react';
+import { Button, Drawer } from 'antd';
+import {
+  projectListActions,
+  selectProjectModalOpen,
+} from './project-list.slice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
-export const ProjectModal = (props: {
-  projectModalOpen: boolean;
-  onClose: () => void;
-}) => {
+export const ProjectModal = () => {
+  const dispatch = useAppDispatch();
+  const projectModalOpen = useAppSelector(selectProjectModalOpen);
   return (
     <Drawer
-      open={props.projectModalOpen}
-      onClose={props.onClose}
+      open={projectModalOpen}
+      onClose={() => dispatch(projectListActions.closeProjectModal())}
       width={'100%'}
     >
       <h1>Project Modal</h1>
-      <Button onClick={props.onClose}>关闭</Button>
+      <Button onClick={() => dispatch(projectListActions.closeProjectModal())}>
+        关闭
+      </Button>
     </Drawer>
   );
 };

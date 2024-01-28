@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { loadServer, DevTools } from 'jira-dev-tool';
-import { AuthProvider } from './screens/context/auth-context';
+import { AppProviders } from 'screens/context';
 
 loadServer(() => {
   const root = ReactDOM.createRoot(
@@ -11,10 +11,10 @@ loadServer(() => {
   );
   root.render(
     <React.StrictMode>
-      <AuthProvider>
+      <AppProviders>
         <DevTools />
         <App />
-      </AuthProvider>
+      </AppProviders>
     </React.StrictMode>
   );
 });
