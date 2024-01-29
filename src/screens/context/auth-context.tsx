@@ -1,10 +1,11 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import * as auth from 'auth-provider';
 import { User } from '../project-list/search-panel';
 import { http } from '../../utils/http';
 import { useMount } from '../../utils';
 import { useAsync } from 'utils/use-async';
 import { FullPageErrorFallback, FullPageLoading } from 'components/lib';
+import { useQueryClient } from 'react-query';
 
 interface AuthForm {
   username: string;
@@ -43,11 +44,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     run,
     setData: setUser,
   } = useAsync<User | null>();
+  const queryClient = useQueryClient();
 
   // point free (函数式编程中的概念)
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
-  const logout = () => auth.logout().then(() => setUser(null));
+  const logout = () =>
+    auth.logout().then(() => {
+      queryClient.clear();
+      setUser(null);
+    });
 
   useMount(() => {
     run(bootstrapUser());

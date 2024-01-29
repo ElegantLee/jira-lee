@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ProjectListScreen } from './screens/project-list';
 import { useAuth } from './screens/context/auth-context';
 import styled from '@emotion/styled';
@@ -13,45 +13,34 @@ import { ProjectModal } from 'screens/project-list/project-modal';
 import { ProjectPopover } from 'components/project-popover';
 
 export const AuthenticatedApp = () => {
-  const [projectModalOpen, setProjectModalOpen] = useState(false);
   return (
     <Container>
-      <PageHeader setProjectModalOpen={setProjectModalOpen} />
-      <Main>
-        <Router>
+      <Router>
+        <PageHeader />
+        <Main>
           <Routes>
             <Route path={'/'} element={<Navigate to={'/projects'} />} />
-            <Route
-              path={'/projects'}
-              element={
-                <ProjectListScreen setProjectModalOpen={setProjectModalOpen} />
-              }
-            />
+            <Route path={'/projects'} element={<ProjectListScreen />} />
             <Route
               path={'/projects/:projectId/*'}
               element={<ProjectScreen />}
             />
           </Routes>
-        </Router>
-      </Main>
-      <ProjectModal
-        projectModalOpen={projectModalOpen}
-        onClose={() => setProjectModalOpen(false)}
-      />
+        </Main>
+        <ProjectModal />
+      </Router>
     </Container>
   );
 };
 
-const PageHeader = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+const PageHeader = () => {
   return (
     <Header between>
       <HeaderLeft gap>
         <ButtonNoPadding type={'link'} onClick={resetRoute}>
           <SoftwareLogo width={'18rem'} color={'rgb(38, 132, 255)'} />
         </ButtonNoPadding>
-        <ProjectPopover setProjectModalOpen={props.setProjectModalOpen} />
+        <ProjectPopover />
         <span>用户</span>
       </HeaderLeft>
       <HeaderRight>

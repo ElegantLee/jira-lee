@@ -67,7 +67,7 @@
     "prettier": "2.8.8"
   },
   "lint-staged": {
-    "*.{js,css,md,ts,tsx}": "prettier --write"
+    "*.{js,css,md,ts,tsx}": ["eslint --fix", "prettier --write"]
   },
   "msw": {
     "workerDirectory": "public"

@@ -1,63 +1,72 @@
-import { useCallback, useEffect } from 'react';
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useEditConfig,
+} from './use-optimistic-options';
 import { useHttp } from './http';
-import { useAsync } from './use-async';
 import { cleanObject } from 'utils';
 import { Project } from 'screens/project-list/list';
+import { QueryKey, useMutation, useQuery } from 'react-query';
 
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
-  const { run, ...result } = useAsync<Project[]>();
-  const fetchProjects = useCallback(
-    () => client('projects', { data: cleanObject(param || {}) }),
-    [client, param]
+  return useQuery<Project[]>(['projects', param], () =>
+    client('projects', { data: cleanObject(param || {}) })
   );
-  useEffect(() => {
-    run(fetchProjects(), { retry: fetchProjects });
-  }, [param, run, fetchProjects]);
-
-  return result;
 };
 
 /**
  * 修改 project 的 hook
  * @returns
  */
-export const useEditProject = () => {
-  const { run, ...asyncResult } = useAsync();
+export const useEditProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const mutate = (params: Partial<Project>) => {
-    return run(
+  return useMutation(
+    (params: Partial<Project>) =>
       client(`projects/${params.id}`, {
         data: params,
         method: 'PATCH',
-      })
-    );
-  };
-
-  return {
-    mutate,
-    ...asyncResult,
-  };
+      }),
+    useEditConfig(queryKey)
+  );
 };
 
 /**
  * 新增 project 的 hook
  * @returns
  */
-export const useAddProject = () => {
-  const { run, ...asyncResult } = useAsync();
+export const useAddProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const mutate = (params: Partial<Project>) => {
-    return run(
-      client(`projects/${params.id}`, {
+  return useMutation(
+    (params: Partial<Project>) =>
+      client(`projects`, {
         data: params,
         method: 'POST',
-      })
-    );
-  };
+      }),
+    useAddConfig(queryKey)
+  );
+};
 
-  return {
-    mutate,
-    ...asyncResult,
-  };
+/**
+ * 删除 project 的 hook
+ * @returns
+ */
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const client = useHttp();
+  return useMutation(
+    ({ id }: { id: number }) =>
+      client(`projects/${id}`, {
+        method: 'DELETE',
+      }),
+    useDeleteConfig(queryKey)
+  );
+};
+
+export const useProject = (id?: number) => {
+  const client = useHttp();
+  return useQuery<Project>(
+    ['project', { id }],
+    () => client(`projects/${id}`),
+    { enabled: Boolean(id) }
+  );
 };
