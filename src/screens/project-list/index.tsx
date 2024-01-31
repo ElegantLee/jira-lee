@@ -3,12 +3,11 @@ import React from 'react';
 import { SearchPanel } from './search-panel';
 import { List } from './list';
 import { useDebounce, useDocumentTitle } from 'utils';
-import styled from '@emotion/styled';
 import { Button, Row } from 'antd';
 import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 import { useProjectModal, useProjectsSearchParams } from './util';
-import { ErrorBox } from 'components/lib';
+import { ErrorBox, ScreenContainer } from 'components/lib';
 
 export const ProjectListScreen = () => {
   useDocumentTitle('项目列表', false);
@@ -18,7 +17,7 @@ export const ProjectListScreen = () => {
   const { open } = useProjectModal();
 
   return (
-    <Contariner>
+    <ScreenContainer>
       <Row justify={'space-between'}>
         <h1>项目列表</h1>
         <Button onClick={open}>创建项目</Button>
@@ -30,12 +29,8 @@ export const ProjectListScreen = () => {
         dataSource={list || undefined}
         users={users || []}
       />
-    </Contariner>
+    </ScreenContainer>
   );
 };
 
 ProjectListScreen.whyDidYouRender = false;
-
-const Contariner = styled.div`
-  padding: 3.2rem;
-`;

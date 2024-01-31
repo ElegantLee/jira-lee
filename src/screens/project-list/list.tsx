@@ -1,5 +1,5 @@
 import React from 'react';
-import { User } from './search-panel';
+import { User } from 'types/user';
 import { Dropdown, Modal, Table, TableProps } from 'antd';
 import type { MenuProps } from 'antd';
 import dayjs from 'dayjs';
@@ -8,15 +8,7 @@ import { Pin } from 'components/pin';
 import { useDeleteProject, useEditProject } from 'utils/project';
 import { ButtonNoPadding } from 'components/lib';
 import { useProjectModal, useProjectQueryKey } from './util';
-
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-}
+import { Project } from 'types/project';
 
 interface ListProps extends TableProps<any> {
   users: User[];
