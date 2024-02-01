@@ -6,6 +6,7 @@ import { ButtonNoPadding } from './lib';
 import { useProjectModal } from 'screens/project-list/util';
 
 export const ProjectPopover = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: projects, isLoading } = useProjects();
   const { open } = useProjectModal();
   const pinnedProjects = projects?.filter((p) => p.pin);
