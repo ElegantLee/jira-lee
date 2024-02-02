@@ -7,7 +7,7 @@ import { useProjectModal } from 'screens/project-list/util';
 
 export const ProjectPopover = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: projects, isLoading } = useProjects();
+  const { data: projects, refetch } = useProjects();
   const { open } = useProjectModal();
   const pinnedProjects = projects?.filter((p) => p.pin);
   const { Text } = Typography;
@@ -30,7 +30,11 @@ export const ProjectPopover = () => {
     </Container>
   );
   return (
-    <Popover placement={'bottom'} content={content}>
+    <Popover
+      onOpenChange={() => refetch()}
+      placement={'bottom'}
+      content={content}
+    >
       <span>项目</span>
     </Popover>
   );
