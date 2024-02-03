@@ -7,7 +7,6 @@ import { ReactComponent as SoftwareLogo } from 'assets/software-logo.svg';
 import { Button, Dropdown, MenuProps } from 'antd';
 import { Navigate, Route, Routes } from 'react-router';
 import { ProjectScreen } from 'screens/project';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { resetRoute } from 'utils';
 import { ProjectModal } from 'screens/project-list/project-modal';
 import { ProjectPopover } from 'components/project-popover';
@@ -16,20 +15,15 @@ import { UserPopover } from 'components/user-popover';
 export const AuthenticatedApp = () => {
   return (
     <Container>
-      <Router>
-        <PageHeader />
-        <Main>
-          <Routes>
-            <Route path={'/'} element={<Navigate to={'/projects'} />} />
-            <Route path={'/projects'} element={<ProjectListScreen />} />
-            <Route
-              path={'/projects/:projectId/*'}
-              element={<ProjectScreen />}
-            />
-          </Routes>
-        </Main>
-        <ProjectModal />
-      </Router>
+      <PageHeader />
+      <Main>
+        <Routes>
+          <Route path={'/'} element={<Navigate to={'/projects'} />} />
+          <Route path={'/projects'} element={<ProjectListScreen />} />
+          <Route path={'/projects/:projectId/*'} element={<ProjectScreen />} />
+        </Routes>
+      </Main>
+      <ProjectModal />
     </Container>
   );
 };
