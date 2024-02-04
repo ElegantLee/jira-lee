@@ -14,7 +14,8 @@ interface ListProps extends TableProps<any> {
   users: User[];
   refresh?: () => void;
 }
-export const List = ({ users, ...props }: ListProps) => {
+
+export const List = React.memo(({ users, ...props }: ListProps) => {
   const { mutate } = useEditProject(useProjectQueryKey());
   return (
     <Table
@@ -85,7 +86,7 @@ export const List = ({ users, ...props }: ListProps) => {
       {...props}
     />
   );
-};
+});
 
 const More = ({ project }: { project: Project }) => {
   const { startEdit } = useProjectModal();
