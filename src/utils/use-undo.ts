@@ -1,6 +1,6 @@
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useReducer } from 'react';
 
-/**
+/** Reducer demo
  * past, present 和 future 三个状态分别定义时，与之关联的 undo、redo、set 和 reset 在使用 useCallback 包裹时需要重复添加依赖项。
  * 由于三个状态是相关联的，所以可以将三个状态合并为一个状态以简化代码。
  * @param initialPresent

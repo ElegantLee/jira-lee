@@ -8,7 +8,7 @@ import { useProjects } from 'utils/project';
 import { useUsers } from 'utils/user';
 import { useProjectModal, useProjectsSearchParams } from './util';
 import { ErrorBox, ScreenContainer } from 'components/lib';
-import { JiraProfiler } from 'components/profiler';
+// import { JiraProfiler } from 'components/profiler';
 
 export const ProjectListScreen = () => {
   useDocumentTitle('项目列表', false);
@@ -18,21 +18,21 @@ export const ProjectListScreen = () => {
   const { open } = useProjectModal();
 
   return (
-    <JiraProfiler id={'项目列表'}>
-      <ScreenContainer>
-        <Row justify={'space-between'}>
-          <h1>项目列表</h1>
-          <Button onClick={open}>创建项目</Button>
-        </Row>
-        <SearchPanel users={users || []} param={param} setParam={setParam} />
-        {error ? <ErrorBox error={error} /> : null}
-        <List
-          loading={isLoading}
-          dataSource={list || undefined}
-          users={users || []}
-        />
-      </ScreenContainer>
-    </JiraProfiler>
+    // <JiraProfiler id={'项目列表'}>
+    <ScreenContainer>
+      <Row justify={'space-between'}>
+        <h1>项目列表</h1>
+        <Button onClick={open}>创建项目</Button>
+      </Row>
+      <SearchPanel param={param} setParam={setParam} />
+      {error ? <ErrorBox error={error} /> : null}
+      <List
+        loading={isLoading}
+        dataSource={list || undefined}
+        users={users || []}
+      />
+    </ScreenContainer>
+    // </JiraProfiler>
   );
 };
 

@@ -5,6 +5,10 @@ import { useProject } from 'utils/project';
 import { useTask } from 'utils/task';
 import { useUrlQueryParam } from 'utils/url';
 
+/**
+ * 从 url 中解析出 project id
+ * @returns
+ */
 export const useProjectIdInUrl = () => {
   const { pathname } = useLocation();
   const id = pathname.match(/projects\/(\d+)/)?.[1];
@@ -12,6 +16,10 @@ export const useProjectIdInUrl = () => {
   return Number(id);
 };
 
+/**
+ * 通过 url 中的 id 查询对应的 project
+ * @returns
+ */
 export const useProjectInUrl = () => useProject(useProjectIdInUrl());
 
 export const useKanbanSearchParams = () => ({ projectId: useProjectIdInUrl() });

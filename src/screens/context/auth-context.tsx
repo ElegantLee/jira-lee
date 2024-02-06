@@ -23,6 +23,9 @@ const bootstrapUser = async () => {
   return user;
 };
 
+/**
+ * 用户登录的状态及对应操作
+ */
 const AuthContext = React.createContext<
   | {
       user: User | null;
@@ -34,6 +37,11 @@ const AuthContext = React.createContext<
 >(undefined);
 AuthContext.displayName = 'AuthContext';
 
+/**
+ * 向下传递 AuthContext
+ * @param param0
+ * @returns
+ */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const {
     data: user,
@@ -59,6 +67,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     run(bootstrapUser());
   });
 
+  /**
+   * 异步请求在不同状态显示相应的页面
+   */
   if (isIdle || isLoading) {
     return <FullPageLoading />;
   }
@@ -75,6 +86,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+/**
+ * 获取 AuthContext 中传递的值
+ * @returns
+ */
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) {

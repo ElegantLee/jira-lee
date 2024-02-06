@@ -8,6 +8,13 @@ interface Config extends RequestInit {
   token?: string;
   data?: object;
 }
+
+/**
+ * 根据传入的 config，包装请求的参数，使用 fetch 发出请求
+ * @param endpoint 需要请求的内容
+ * @param param1 请求所需的额外参数
+ * @returns
+ */
 export const http = async (
   endpoint: string,
   { data, token, headers, ...customConfig }: Config = {}

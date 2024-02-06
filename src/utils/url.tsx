@@ -2,6 +2,11 @@ import { useMemo } from 'react';
 import { URLSearchParamsInit, useSearchParams } from 'react-router-dom';
 import { cleanObject } from 'utils';
 
+/**
+ *
+ * @param keys
+ * @returns
+ */
 export const useUrlQueryParam = <K extends string>(keys: K[]) => {
   const [searchParams] = useSearchParams();
   const setSearchParams = useSetUrlSearchParam();

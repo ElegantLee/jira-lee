@@ -11,6 +11,7 @@ import {
 type DropProps = Omit<DroppableProps, 'children'> & {
   children: React.ReactNode;
 };
+
 export const Drop = ({ children, ...props }: DropProps) => {
   return (
     <Droppable {...props}>
@@ -23,7 +24,7 @@ export const Drop = ({ children, ...props }: DropProps) => {
           };
           return React.cloneElement(children, props);
         }
-        return <div />;
+        return <div></div>;
       }}
     </Droppable>
   );
@@ -35,6 +36,7 @@ type DropChildProps = Partial<
   } & DroppableProvidedProps
 > &
   React.HTMLAttributes<HTMLDivElement>;
+
 export const DropChild = React.forwardRef<HTMLDivElement, DropChildProps>(
   ({ children, ...props }, ref) => (
     <div ref={ref} {...props}>
@@ -47,6 +49,7 @@ export const DropChild = React.forwardRef<HTMLDivElement, DropChildProps>(
 type DragProps = Omit<DraggableProps, 'children'> & {
   children: React.ReactNode;
 };
+
 export const Drag = ({ children, ...props }: DragProps) => {
   return (
     <Draggable {...props}>

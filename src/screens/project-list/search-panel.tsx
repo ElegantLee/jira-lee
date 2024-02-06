@@ -4,15 +4,13 @@ import React from 'react';
 import { Form, Input } from 'antd';
 import { Project } from 'types/project';
 import { UserSelect } from 'components/user-select';
-import { User } from 'types/user';
 
 interface SearchPanelProps {
-  users: User[];
   param: Partial<Pick<Project, 'name' | 'personId'>>;
   setParam: (param: SearchPanelProps['param']) => void;
 }
 
-export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
+export const SearchPanel = ({ param, setParam }: SearchPanelProps) => {
   return (
     <Form
       className={css({
@@ -22,7 +20,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
     >
       <Form.Item>
         <Input
-          placeholder={'用户名'}
+          placeholder={'项目名'}
           type="text"
           value={param.name}
           onChange={(evt) =>

@@ -3,6 +3,9 @@ import styled from '@emotion/styled';
 import { Button, Spin, Typography } from 'antd';
 import { DevTools } from 'jira-dev-tool';
 
+/**
+ * 盒子内部元素水平垂直居中，元素之间的 margin-right 值由 gap 的值决定
+ */
 export const Row = styled.div<{
   gap?: number | boolean;
   between?: boolean;

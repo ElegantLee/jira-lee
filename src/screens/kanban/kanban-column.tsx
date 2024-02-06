@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Kanban } from 'types/kanban';
 import { useTasks } from 'utils/task';
 import { useKanbansQueryKey, useTaskModal, useTaskSearchParams } from './util';
@@ -46,7 +46,10 @@ export const KanbanColumn = React.forwardRef<
   { kanban: Kanban }
 >(({ kanban, ...props }, ref) => {
   const { data: allTasks } = useTasks(useTaskSearchParams());
-  const tasks = allTasks?.filter((task) => task.kanbanId === kanban.id);
+  const tasks = useMemo(
+    () => allTasks?.filter((task) => task.kanbanId === kanban.id),
+    [allTasks, kanban]
+  );
   return (
     <Container {...props} ref={ref}>
       <Row between>
@@ -78,38 +81,41 @@ export const KanbanColumn = React.forwardRef<
 
 const More = ({ kanban }: { kanban: Kanban }) => {
   const { mutateAsync: deleteKanban } = useDeleteKanban(useKanbansQueryKey());
-  const confirmDeleteKanban = (id: number) => {
-    Modal.confirm({
-      okText: '确定',
-      cancelText: '取消',
-      title: '确定删除看板吗？',
-      onOk() {
-        deleteKanban({ id: id });
-      },
-    });
-  };
 
-  const items: MenuProps['items'] = [
-    // {
-    //   key: 'edit',
-    //   label: (
-    //     <ButtonNoPadding type={'link'} onClick={editProject(project.id)}>
-    //       编辑
-    //     </ButtonNoPadding>
-    //   ),
-    // },
-    {
-      key: 'delete',
-      label: (
-        <ButtonNoPadding
-          type={'link'}
-          onClick={() => confirmDeleteKanban(kanban.id)}
-        >
-          删除
-        </ButtonNoPadding>
-      ),
-    },
-  ];
+  const items: MenuProps['items'] = useMemo(() => {
+    const confirmDeleteKanban = (id: number) => {
+      Modal.confirm({
+        okText: '确定',
+        cancelText: '取消',
+        title: '确定删除看板吗？',
+        onOk() {
+          deleteKanban({ id: id });
+        },
+      });
+    };
+
+    return [
+      // {
+      //   key: 'edit',
+      //   label: (
+      //     <ButtonNoPadding type={'link'} onClick={editProject(project.id)}>
+      //       编辑
+      //     </ButtonNoPadding>
+      //   ),
+      // },
+      {
+        key: 'delete',
+        label: (
+          <ButtonNoPadding
+            type={'link'}
+            onClick={() => confirmDeleteKanban(kanban.id)}
+          >
+            删除
+          </ButtonNoPadding>
+        ),
+      },
+    ];
+  }, [deleteKanban, kanban]);
 
   return (
     <Dropdown menu={{ items }}>

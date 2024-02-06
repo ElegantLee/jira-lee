@@ -17,6 +17,11 @@ const defaultConfig = {
   throwOnError: false,
 };
 
+/**
+ * 当组件已经挂载后返回 dispatch 函数，此时可以安全的 dispatch
+ * @param dispatch
+ * @returns
+ */
 const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
   const mountedRef = useMountedRef();
   return useCallback(
@@ -25,6 +30,12 @@ const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
   );
 };
 
+/**
+ *  Reducer 风格的异步请求 hook，传入一个异步请求的 promise，返回执行异步请求的函数以及异步相关状态和请求的数据
+ * @param initialState 异步请求的初始化状态
+ * @param initialConfig 异步请求的额外操作的配置项
+ * @returns
+ */
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof defaultConfig

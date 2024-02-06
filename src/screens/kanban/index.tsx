@@ -33,7 +33,7 @@ export const KanbanScreen = () => {
     <DragDropContext
       onDragEnd={(param) => {
         onDragEnd(param);
-        console.log(param);
+        // console.log(param);
       }}
     >
       <ScreenContainer>
@@ -75,6 +75,10 @@ const ColumnContainer = styled.div`
   flex: 1;
 `;
 
+/**
+ * 看板和任务项拖拽的实现
+ * @returns
+ */
 export const useDragEnd = () => {
   const { data: kanbans } = useKanbans(useKanbanSearchParams());
   const { mutate: reorderKanban } = useReorderKanban(useKanbansQueryKey());

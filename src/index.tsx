@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { loadServer, DevTools } from 'jira-dev-tool';
 import { AppProviders } from 'screens/context';
-import { JiraProfiler } from 'components/profiler';
+// import { JiraProfiler } from 'components/profiler';
 
 loadServer(() => {
   const root = ReactDOM.createRoot(
@@ -12,12 +12,12 @@ loadServer(() => {
   );
   root.render(
     <React.StrictMode>
-      <JiraProfiler id={'Root App'} phases={['mount']}>
-        <AppProviders>
-          <DevTools />
-          <App />
-        </AppProviders>
-      </JiraProfiler>
+      {/* <JiraProfiler id={'Root App'} phases={['mount']}> */}
+      <AppProviders>
+        <DevTools />
+        <App />
+      </AppProviders>
+      {/* </JiraProfiler> */}
     </React.StrictMode>
   );
 });

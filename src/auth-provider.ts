@@ -11,36 +11,37 @@ export const handleUserResponse = ({ user }: { user: User }) => {
   return user;
 };
 
-export const login = (data: { username: string; password: string }) => {
-  return fetch(`${apiUrl}/login`, {
+export const login = async (data: { username: string; password: string }) => {
+  const response = await fetch(`${apiUrl}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(async (response) => {
-    if (response.ok) {
-      return handleUserResponse(await response.json());
-    } else {
-      return Promise.reject(await response.json());
-    }
   });
+  if (response.ok) {
+    return handleUserResponse(await response.json());
+  } else {
+    return Promise.reject(await response.json());
+  }
 };
 
-export const register = (data: { username: string; password: string }) => {
-  return fetch(`${apiUrl}/register`, {
+export const register = async (data: {
+  username: string;
+  password: string;
+}) => {
+  const response = await fetch(`${apiUrl}/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(data),
-  }).then(async (response) => {
-    if (response.ok) {
-      return handleUserResponse(await response.json());
-    } else {
-      return Promise.reject(await response.json());
-    }
   });
+  if (response.ok) {
+    return handleUserResponse(await response.json());
+  } else {
+    return Promise.reject(await response.json());
+  }
 };
 
 export const logout = async () =>

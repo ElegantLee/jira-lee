@@ -28,9 +28,9 @@ export default function UnauthenticatedApp() {
           <LoginScreen onError={setError} />
         )}
         <Divider />
-        <button onClick={() => setIsRegister(!isRegister)}>
+        <Button onClick={() => setIsRegister(!isRegister)}>
           {isRegister ? '已有账号？直接登录' : '没有账号？注册新账号'}
-        </button>
+        </Button>
       </ShadowCard>
     </Container>
   );

@@ -26,7 +26,7 @@ export const useProjectQueryKey = () => {
 };
 
 /**
- * hook：管理项目创建、编辑、删除的操作，打开关闭的状态
+ * hook：项目创建、编辑、删除的操作逻辑，打开关闭的状态
  * @returns
  */
 export const useProjectModal = () => {

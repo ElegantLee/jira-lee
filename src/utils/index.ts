@@ -21,7 +21,10 @@ export const cleanObject = (object?: { [key: string]: unknown }) => {
 };
 
 /* custom hook(只能在组件或其他 hook 中使用) */
-// 组件在加载时只执行一次初始化
+/**
+ * 组件在加载时只执行一次初始化
+ * @param callback
+ */
 export const useMount = (callback: () => void) => {
   useEffect(() => {
     callback();
@@ -29,7 +32,12 @@ export const useMount = (callback: () => void) => {
   }, []);
 };
 
-/* debounce --- 防抖 */
+/**
+ * debounce --- 防抖
+ * @param value
+ * @param delay
+ * @returns
+ */
 export const useDebounce = <V>(value: V, delay?: number) => {
   const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
@@ -52,6 +60,11 @@ export const useDebounce = <V>(value: V, delay?: number) => {
 //   }
 // }
 
+/**
+ * 改变页面标题
+ * @param title 页面标题
+ * @param keepOnUnmount 是否在组件卸载时保持标题不变
+ */
 export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
   const oldTitle = useRef(document.title).current;
   // 页面加载时：旧 title
@@ -71,6 +84,10 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
 
 export const resetRoute = () => (window.location.href = window.location.origin);
 
+/**
+ * 返回组件挂载的状态
+ * @returns
+ */
 export const useMountedRef = () => {
   const mountedRef = useRef(false);
 

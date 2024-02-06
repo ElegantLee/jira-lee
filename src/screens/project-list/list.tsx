@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { User } from 'types/user';
 import { Dropdown, Modal, Table, TableProps } from 'antd';
 import type { MenuProps } from 'antd';
@@ -90,40 +90,43 @@ export const List = React.memo(({ users, ...props }: ListProps) => {
 
 const More = ({ project }: { project: Project }) => {
   const { startEdit } = useProjectModal();
-  const editProject = (id: number) => () => startEdit(id);
   const { mutate: deleteProject } = useDeleteProject(useProjectQueryKey());
-  const confirmDeleteProject = (id: number) => {
-    Modal.confirm({
-      title: '确定要删除这个项目吗?',
-      content: '点击确定后项目将会被删除',
-      okText: '确定',
-      onOk() {
-        deleteProject({ id });
-      },
-    });
-  };
 
-  const items: MenuProps['items'] = [
-    {
-      key: 'edit',
-      label: (
-        <ButtonNoPadding type={'link'} onClick={editProject(project.id)}>
-          编辑
-        </ButtonNoPadding>
-      ),
-    },
-    {
-      key: 'delete',
-      label: (
-        <ButtonNoPadding
-          type={'link'}
-          onClick={() => confirmDeleteProject(project.id)}
-        >
-          删除
-        </ButtonNoPadding>
-      ),
-    },
-  ];
+  const items: MenuProps['items'] = useMemo(() => {
+    const editProject = (id: number) => () => startEdit(id);
+    const confirmDeleteProject = (id: number) => {
+      Modal.confirm({
+        title: '确定要删除这个项目吗?',
+        content: '点击确定后项目将会被删除',
+        okText: '确定',
+        onOk() {
+          deleteProject({ id });
+        },
+      });
+    };
+
+    return [
+      {
+        key: 'edit',
+        label: (
+          <ButtonNoPadding type={'link'} onClick={editProject(project.id)}>
+            编辑
+          </ButtonNoPadding>
+        ),
+      },
+      {
+        key: 'delete',
+        label: (
+          <ButtonNoPadding
+            type={'link'}
+            onClick={() => confirmDeleteProject(project.id)}
+          >
+            删除
+          </ButtonNoPadding>
+        ),
+      },
+    ];
+  }, [deleteProject, project, startEdit]);
   return (
     <Dropdown menu={{ items }}>
       <ButtonNoPadding type={'link'}>...</ButtonNoPadding>

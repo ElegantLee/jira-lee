@@ -8,6 +8,11 @@ import { cleanObject } from 'utils';
 import { Project } from 'types/project';
 import { QueryKey, useMutation, useQuery } from 'react-query';
 
+/**
+ * 请求 projects 数据
+ * @param param
+ * @returns
+ */
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
   return useQuery<Project[]>(['projects', cleanObject(param)], () =>
@@ -62,6 +67,11 @@ export const useDeleteProject = (queryKey: QueryKey) => {
   );
 };
 
+/**
+ * 通过 id 查询 project
+ * @param id
+ * @returns
+ */
 export const useProject = (id?: number) => {
   const client = useHttp();
   return useQuery<Project>(

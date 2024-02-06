@@ -9,7 +9,7 @@ export const LoginScreen = ({
 }: {
   onError: (error: Error) => void;
 }) => {
-  const { login, user } = useAuth();
+  const { login } = useAuth();
   const { run, isLoading } = useAsync(undefined, { throwOnError: true });
   const handleSubmit = async (values: {
     username: string;
@@ -24,12 +24,6 @@ export const LoginScreen = ({
 
   return (
     <Form onFinish={handleSubmit}>
-      {user ? (
-        <div>
-          登录成功，用户名: {user?.name}
-          token: {user.token}
-        </div>
-      ) : null}
       <Form.Item
         name={'username'}
         rules={[{ required: true, message: '请输入用户名' }]}
